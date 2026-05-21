@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop Gemelos Digitales — MIT × UNAL 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f3ee;
+    --cream: #f0ede6;
+    --red: #A31F34;
+    --red-light: #c23a50;
+    --gold: #C59A26;
+    --gray: #6b6b6b;
+    --gray-light: #e8e5df;
+    --border: rgba(10,10,10,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(245,243,238,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); }
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-links a { font-size: 0.82rem; font-weight: 500; letter-spacing: 0.05em; text-decoration: none; color: var(--black); opacity: 0.7; transition: opacity 0.2s; }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cta { background: var(--red) !important; color: var(--white) !important; padding: 0.5rem 1.2rem !important; opacity: 1 !important; border-radius: 2px; }
+
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; position: relative; overflow: hidden; }
+  .hero-left { padding: 6rem 4rem 4rem; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
+  .hero-right { background: var(--black); position: relative; overflow: hidden; }
+  .hero-right::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(163,31,52,0.4) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(197,154,38,0.2) 0%, transparent 50%); }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(245,243,238,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(245,243,238,0.04) 1px, transparent 1px); background-size: 40px 40px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); border: 1px solid var(--red); padding: 0.35rem 0.8rem; border-radius: 2px; margin-bottom: 2rem; width: fit-content; }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--red); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2.8rem, 4vw, 4.2rem); line-height: 1.1; margin-bottom: 1.5rem; font-weight: 400; }
+  .hero h1 em { font-style: italic; color: var(--red); }
+  .hero-sub { font-size: 1rem; color: var(--gray); line-height: 1.7; margin-bottom: 2.5rem; max-width: 480px; font-weight: 300; }
+  .hero-meta { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 3rem; }
+  .hero-meta-item { display: flex; align-items: center; gap: 0.8rem; font-size: 0.88rem; font-weight: 500; }
+  .hero-meta-item .icon { width: 32px; height: 32px; background: var(--cream); border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+  .hero-actions { display: flex; gap: 1rem; align-items: center; }
+  .btn-primary { background: var(--red); color: var(--white); padding: 0.9rem 2rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; border: none; cursor: pointer; border-radius: 2px; text-decoration: none; transition: background 0.2s, transform 0.1s; display: inline-block; }
+  .btn-primary:hover { background: var(--red-light); transform: translateY(-1px); }
+  .btn-secondary { font-size: 0.88rem; font-weight: 500; color: var(--gray); text-decoration: none; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
+  .btn-secondary:hover { color: var(--black); }
+  .hero-visual-content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 4rem; z-index: 2; }
+  .hero-orbs { position: relative; width: 280px; height: 280px; margin-bottom: 3rem; }
+  .orb { position: absolute; border-radius: 50%; border: 1px solid rgba(245,243,238,0.15); }
+  .orb-1 { width: 280px; height: 280px; top: 0; left: 0; animation: rotate 20s linear infinite; }
+  .orb-2 { width: 200px; height: 200px; top: 40px; left: 40px; animation: rotate 15s linear infinite reverse; }
+  .orb-3 { width: 120px; height: 120px; top: 80px; left: 80px; background: rgba(163,31,52,0.3); animation: rotate 10s linear infinite; }
+  .orb-dot { position: absolute; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; top: -4px; left: 50%; transform: translateX(-50%); }
+  @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .orb-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; color: rgba(245,243,238,0.6); text-align: center; line-height: 1.8; }
+  .hero-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; width: 100%; border: 1px solid rgba(245,243,238,0.1); }
+  .hero-stat { padding: 1.2rem; text-align: center; border-right: 1px solid rgba(245,243,238,0.1); }
+  .hero-stat:last-child { border-right: none; }
+  .stat-number { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--white); display: block; }
+  .stat-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,243,238,0.4); font-family: 'DM Mono', monospace; }
+
+  .institutions { padding: 3rem 4rem; background: var(--black); display: flex; align-items: center; justify-content: center; gap: 3rem; border-top: 1px solid rgba(245,243,238,0.08); }
+  .inst-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,243,238,0.3); }
+  .inst-divider { width: 1px; height: 40px; background: rgba(245,243,238,0.1); }
+  .inst-name { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--white); letter-spacing: 0.05em; }
+  .inst-name span { color: var(--red); }
+  .inst-sub { font-size: 0.72rem; color: rgba(245,243,238,0.4); margin-top: 0.2rem; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; }
+
+  section { padding: 6rem 4rem; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--red); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.8rem; }
+  .section-label::after { content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--red); opacity: 0.4; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3vw, 3rem); font-weight: 400; line-height: 1.2; margin-bottom: 1.5rem; }
+
+  .about { background: var(--cream); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .about-text p { font-size: 1.05rem; line-height: 1.85; color: #333; font-weight: 300; margin-bottom: 1.5rem; }
+  .about-features { display: flex; flex-direction: column; gap: 1px; border: 1px solid var(--border); }
+  .feature-item { display: flex; gap: 1.2rem; align-items: flex-start; padding: 1.4rem 1.6rem; background: var(--white); border-bottom: 1px solid var(--border); transition: background 0.2s; }
+  .feature-item:last-child { border-bottom: none; }
+  .feature-item:hover { background: var(--cream); }
+  .feature-icon { width: 36px; height: 36px; flex-shrink: 0; background: var(--black); color: var(--white); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+  .feature-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .feature-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.5; font-weight: 300; }
+
+  .professors { background: var(--black); }
+  .professors .section-title { color: var(--white); }
+  .professors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 3rem; }
+  .prof-card { background: #111; padding: 2.5rem; position: relative; overflow: hidden; transition: background 0.3s; }
+  .prof-card:hover { background: #161616; }
+  .prof-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--red); }
+  .prof-initials { width: 64px; height: 64px; background: var(--red); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--white); margin-bottom: 1.5rem; }
+  .prof-name { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--white); margin-bottom: 0.3rem; font-weight: 400; }
+  .prof-institution { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .prof-bio { font-size: 0.88rem; color: rgba(245,243,238,0.5); line-height: 1.7; font-weight: 300; margin-bottom: 1.2rem; }
+  .prof-link { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--red); text-decoration: none; letter-spacing: 0.1em; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
+  .prof-link:hover { color: var(--red-light); }
+
+  .requirements { background: var(--white); }
+  .req-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; margin-top: 3rem; }
+  .req-list { display: flex; flex-direction: column; gap: 1rem; }
+  .req-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1.2rem 1.4rem; border: 1px solid var(--border); border-radius: 2px; background: var(--cream); }
+  .req-check { width: 24px; height: 24px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+  .req-check.required { background: var(--red); color: var(--white); }
+  .req-check.optional { background: var(--gold); color: var(--white); }
+  .req-text { font-size: 0.92rem; line-height: 1.5; font-weight: 400; }
+  .req-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); display: block; margin-top: 0.2rem; }
+  .quota-card { background: var(--black); padding: 2.5rem; border-radius: 4px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+  .quota-number { font-family: 'DM Serif Display', serif; font-size: 5rem; color: var(--white); line-height: 1; }
+  .quota-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,243,238,0.4); }
+  .quota-divider { width: 40px; height: 1px; background: rgba(245,243,238,0.15); }
+  .quota-cert { font-size: 0.82rem; color: var(--gold); text-align: center; line-height: 1.5; }
+
+  .schedule { background: var(--cream); }
+  .schedule-tabs { display: flex; gap: 0; margin-bottom: 3rem; border: 1px solid var(--border); width: fit-content; }
+  .tab { padding: 0.8rem 2rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; background: transparent; font-family: 'DM Sans', sans-serif; transition: all 0.2s; border-right: 1px solid var(--border); color: var(--gray); }
+  .tab:last-child { border-right: none; }
+  .tab.active { background: var(--black); color: var(--white); }
+  .schedule-content { display: none; }
+  .schedule-content.active { display: flex; flex-direction: column; gap: 1px; }
+  .schedule-item { display: grid; grid-template-columns: 100px 1fr; gap: 0; background: var(--white); border: 1px solid var(--border); border-bottom: none; overflow: hidden; }
+  .schedule-item:last-child { border-bottom: 1px solid var(--border); }
+  .schedule-time { background: var(--black); color: rgba(245,243,238,0.6); font-family: 'DM Mono', monospace; font-size: 0.72rem; padding: 1.2rem; display: flex; align-items: center; justify-content: center; text-align: center; letter-spacing: 0.05em; }
+  .schedule-event { padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
+  .schedule-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-main { background: var(--red); }
+  .dot-break { background: var(--gold); }
+  .dot-meal { background: #4CAF50; }
+  .schedule-event-name { font-size: 0.9rem; font-weight: 500; }
+  .schedule-event-sub { font-size: 0.78rem; color: var(--gray); margin-top: 0.15rem; }
+
+  .cta-section { background: var(--red); padding: 6rem 4rem; display: flex; align-items: center; justify-content: space-between; gap: 3rem; }
+  .cta-left .cta-title { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3.5vw, 3.5rem); color: var(--white); line-height: 1.2; font-weight: 400; margin-bottom: 1rem; }
+  .cta-left .cta-sub { color: rgba(245,243,238,0.7); font-size: 1rem; font-weight: 300; }
+  .btn-white { background: var(--white); color: var(--red); padding: 1.1rem 2.5rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; border: none; cursor: pointer; border-radius: 2px; text-decoration: none; white-space: nowrap; transition: transform 0.1s, box-shadow 0.2s; display: inline-block; }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+  footer { background: var(--black); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(245,243,238,0.08); }
+  .footer-left { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: rgba(245,243,238,0.3); letter-spacing: 0.1em; line-height: 1.8; }
+  .footer-right { font-size: 0.8rem; color: rgba(245,243,238,0.4); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-left > * { animation: fadeUp 0.7s ease forwards; opacity: 0; }
+  .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.4s; }
+  .hero-left > *:nth-child(5) { animation-delay: 0.5s; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">MIT × UNAL — 2026</div>
+  <div class="nav-links">
+    <a href="#about">Sobre el Workshop</a>
+    <a href="#professors">Profesores</a>
+    <a href="#schedule">Programa</a>
+    <a href="#requirements">Requisitos</a>
+    <a href="#inscripcion" class="nav-cta">Inscríbete</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">Cupo limitado · 30 estudiantes</div>
+    <h1>Diseño de <em>Experimentos</em> con Gemelos Digitales</h1>
+    <p class="hero-sub">Un taller práctico del convenio MIT — Centro de Excelencia en Computación Cuántica e IA — UNAL. Medellín, Junio 18 y 19 de 2026.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="icon">📅</div><span>Junio 18 y 19 de 2026</span></div>
+      <div class="hero-meta-item"><div class="icon">📍</div><span>Universidad Nacional de Colombia — Sede Medellín</span></div>
+      <div class="hero-meta-item"><div class="icon">👥</div><span>30 cupos disponibles — admisión por perfil</span></div>
+    </div>
+    <div class="hero-actions">
+      <a href="#inscripcion" class="btn-primary">Inscríbete ahora →</a>
+      <a href="#about" class="btn-secondary">Conoce más ↓</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-grid"></div>
+    <div class="hero-visual-content">
+      <div class="hero-orbs">
+        <div class="orb orb-1"><div class="orb-dot"></div></div>
+        <div class="orb orb-2"><div class="orb-dot"></div></div>
+        <div class="orb orb-3"></div>
+        <div class="orb-center">DIGITAL<br>TWIN<br>FRAMEWORK</div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="stat-number">2</span><span class="stat-label">Días</span></div>
+        <div class="hero-stat"><span class="stat-number">30</span><span class="stat-label">Cupos</span></div>
+        <div class="hero-stat"><span class="stat-number">MIT</span><span class="stat-label">Alianza</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="institutions">
+  <div><div class="inst-label">Organizado por</div></div>
+  <div class="inst-divider"></div>
+  <div>
+    <div class="inst-name">Massachusetts Institute of <span>Technology</span></div>
+    <div class="inst-sub">Cambridge, MA · USA</div>
+  </div>
+  <div class="inst-divider"></div>
+  <div>
+    <div class="inst-name">Universidad Nacional de <span>Colombia</span></div>
+    <div class="inst-sub">Centro de Excelencia en Computación Cuántica e IA</div>
+  </div>
+</div>
+
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="section-label">Sobre el Workshop</div>
+      <h2 class="section-title">Ciencia experimental en la era digital</h2>
+      <p>Este taller práctico ofrece a estudiantes e investigadores una inmersión en el diseño de experimentos científicos mediante gemelos digitales — réplicas virtuales de sistemas físicos que permiten simular, predecir y optimizar antes de implementar en el mundo real.</p>
+      <p>Una metodología que está transformando la investigación científica y la ingeniería de vanguardia, presentada directamente por investigadores del MIT.</p>
+    </div>
+    <div class="about-features">
+      <div class="feature-item"><div class="feature-icon">⚡</div><div><div class="feature-title">Fundamentos de Gemelos Digitales</div><div class="feature-desc">Principios, arquitecturas y casos de uso en ciencia e ingeniería moderna</div></div></div>
+      <div class="feature-item"><div class="feature-icon">🔬</div><div><div class="feature-title">Diseño Experimental</div><div class="feature-desc">Metodología MIT para diseñar experimentos controlados en entornos digitales</div></div></div>
+      <div class="feature-item"><div class="feature-icon">🧮</div><div><div class="feature-title">Modelado Físico</div><div class="feature-desc">Integración de modelos físicos con herramientas de simulación digital</div></div></div>
+      <div class="feature-item"><div class="feature-icon">🛠</div><div><div class="feature-title">Taller Práctico</div><div class="feature-desc">Construcción y validación de gemelos digitales en sesiones hands-on</div></div></div>
+      <div class="feature-item"><div class="feature-icon">🏆</div><div><div class="feature-title">Certificación</div><div class="feature-desc">Certificado expedido por el Centro de Excelencia UNAL — MIT</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="professors" id="professors">
+  <div class="section-label" style="color:rgba(245,243,238,0.4)">Cuerpo Docente</div>
+  <h2 class="section-title">Profesores del MIT</h2>
+  <div class="professors-grid">
+    <div class="prof-card">
+      <div class="prof-initials">FCP</div>
+      <div class="prof-name">Fabian Camilo Pastrana Cruz</div>
+      <div class="prof-institution">Massachusetts Institute of Technology</div>
+      <p class="prof-bio">Investigador del MIT con expertise en física experimental y diseño de sistemas de alta precisión. Miembro del Center for Ultracold Atoms. Líder del módulo de gemelos digitales aplicados a experimentos físicos.</p>
+      <a href="https://cua.mit.edu/people/fabian-camilo-pastrana-cruz" target="_blank" class="prof-link">→ Perfil en MIT CUA</a>
+    </div>
+    <div class="prof-card">
+      <div class="prof-initials">JM</div>
+      <div class="prof-name">José Muñoz</div>
+      <div class="prof-institution">Massachusetts Institute of Technology</div>
+      <p class="prof-bio">Investigador del MIT con amplia experiencia en modelado y simulación de sistemas físicos complejos. Responsable del módulo de metodología experimental y validación de gemelos digitales.</p>
+    </div>
+  </div>
+</section>
+
+<section class="requirements" id="requirements">
+  <div class="section-label">Participación</div>
+  <h2 class="section-title">Requisitos y cupo</h2>
+  <div class="req-grid">
+    <div>
+      <p style="color:var(--gray); margin-bottom:2rem; font-size:0.95rem; font-weight:300; line-height:1.7">Dirigido a estudiantes de pregrado, maestría y doctorado, investigadores y profesores con interés en metodologías experimentales avanzadas.</p>
+      <div class="req-list">
+        <div class="req-item"><div class="req-check required">✓</div><div><div class="req-text">Conocimientos en Física de Electricidad y Magnetismo</div><span class="req-tag">Requerido</span></div></div>
+        <div class="req-item"><div class="req-check optional">★</div><div><div class="req-text">Manejo de software CAD — Autodesk Inventor o similar</div><span class="req-tag">Deseable</span></div></div>
+        <div class="req-item"><div class="req-check required">✓</div><div><div class="req-text">Estar vinculado a una institución académica o de investigación</div><span class="req-tag">Requerido</span></div></div>
+      </div>
+    </div>
+    <div class="quota-card">
+      <div class="quota-label">Cupo total</div>
+      <div class="quota-number">30</div>
+      <div class="quota-label">estudiantes</div>
+      <div class="quota-divider"></div>
+      <div class="quota-cert">🏆 Certificado de participación<br>MIT × UNAL</div>
+    </div>
+  </div>
+</section>
+
+<section class="schedule" id="schedule">
+  <div class="section-label">Programa</div>
+  <h2 class="section-title">Agenda del Workshop</h2>
+  <div class="schedule-tabs">
+    <button class="tab active" onclick="showDay(1)">Día 1 — Junio 18</button>
+    <button class="tab" onclick="showDay(2)">Día 2 — Junio 19</button>
+  </div>
+  <div class="schedule-content active" id="day1">
+    <div class="schedule-item"><div class="schedule-time">08:00</div><div class="schedule-event"><div class="schedule-dot dot-break"></div><div><div class="schedule-event-name">Registro y bienvenida</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">08:30</div><div class="schedule-event"><div class="schedule-dot dot-main"></div><div><div class="schedule-event-name">Apertura oficial</div><div class="schedule-event-sub">Convenio MIT-UNAL y visión del programa</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">09:00</div><div class="schedule-event"><div class="schedule-dot dot-main"></div><div><div class="schedule-event-name">Módulo 1: Introducción a los Gemelos Digitales</div><div class="schedule-event-sub">Fundamentos, arquitecturas y casos de uso en ciencia e ingeniería</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">10:30</div><div class="schedule-event"><div class="schedule-dot dot-break"></div><div><div class="schedule-event-name">☕ Break</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">11:00</div><div class="schedule-event"><div class="schedule-dot dot-main"></div><div><div class="schedule-event-name">Módulo 2: Fundamentos físicos y modelado</div><div class="schedule-event-sub">Integración de modelos físicos con herramientas digitales</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">12:30</div><div class="schedule-event"><div class="schedule-dot dot-meal"></div><div><div class="schedule-event-name">🍽 Almuerzo</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">14:00</div><div class="schedule-event"><div class="schedule-dot dot-main"></div><div><div class="schedule-event-name">Módulo 3: Taller práctico</div><div class="schedule-event-sub">Construcción del primer gemelo digital — sesión hands-on</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">16:00</div><div class="schedule-event"><div class="schedule-dot dot-break"></div><div><div class="schedule-event-name">☕ Break</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">16:30</div><div class="schedule-event"><div class="schedule-dot dot-main"></div><div><div class="schedule-event-name">Sesión de trabajo guiado</div><div class="schedule-event-sub">Resolución de problemas con los profesores del MIT</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">18:00</div><div class="schedule-event"><div class="schedule-dot dot-break"></div><div><div class="schedule-event-name">Cierre del Día 1</div></div></div></div>
+  </div>
+  <div class="schedule-content" id="day2">
+    <div class="schedule-item"><div class="schedule-time">08:00</div><div class="schedule-event"><div class="schedule-dot dot-break"></div><div><div class="schedule-event-name">Recapitulación Día 1</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">08:30</div><div class="schedule-event"><div class="schedule-dot dot-main"></div><div><div class="schedule-event-name">Módulo 4: Diseño de experimentos con gemelos digitales</div><div class="schedule-event-sub">Metodología MIT para experimentación virtual</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">10:30</div><div class="schedule-event"><div class="schedule-dot dot-break"></div><div><div class="schedule-event-name">☕ Break</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">11:00</div><div class="schedule-event"><div class="schedule-dot dot-main"></div><div><div class="schedule-event-name">Módulo 5: Taller práctico avanzado</div><div class="schedule-event-sub">Diseño experimental y validación</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">12:30</div><div class="schedule-event"><div class="schedule-dot dot-meal"></div><div><div class="schedule-event-name">🍽 Almuerzo</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">14:00</div><div class="schedule-event"><div class="schedule-dot dot-main"></div><div><div class="schedule-event-name">Módulo 6: Presentación de resultados</div><div class="schedule-event-sub">Cada grupo presenta su gemelo digital y experimento diseñado</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">16:00</div><div class="schedule-event"><div class="schedule-dot dot-break"></div><div><div class="schedule-event-name">☕ Break</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">16:30</div><div class="schedule-event"><div class="schedule-dot dot-main"></div><div><div class="schedule-event-name">Perspectivas y oportunidades de investigación</div><div class="schedule-event-sub">Discusión sobre colaboraciones MIT-UNAL y líneas futuras</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">17:00</div><div class="schedule-event"><div class="schedule-dot dot-break"></div><div><div class="schedule-event-name">🏆 Clausura y entrega de certificados</div></div></div></div>
+    <div class="schedule-item"><div class="schedule-time">18:00</div><div class="schedule-event"><div class="schedule-dot dot-break"></div><div><div class="schedule-event-name">Fin del Workshop</div></div></div></div>
+  </div>
+</section>
+
+<section class="cta-section" id="inscripcion">
+  <div class="cta-left">
+    <div class="cta-title">¿Listo para aprender<br>con el MIT?</div>
+    <p class="cta-sub">Cupo limitado a 30 estudiantes. Inscríbete antes de que se agoten los lugares.</p>
+  </div>
+  <a href="LINK_GOOGLE_FORM_AQUI" class="btn-white">Formulario de inscripción →</a>
+</section>
+
+<footer>
+  <div class="footer-left">
+    Workshop: Gemelos Digitales en Ciencia Experimental<br>
+    Convenio MIT × Centro de Excelencia en Computación Cuántica e IA — UNAL<br>
+    Medellín, Colombia · Junio 18-19, 2026
+  </div>
+  <div class="footer-right">contacto@unal.edu.co</div>
+</footer>
+
+<script>
+function showDay(day) {
+  document.querySelectorAll('.schedule-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('day' + day).classList.add('active');
+  document.querySelectorAll('.tab')[day-1].classList.add('active');
+}
+</script>
+</body>
+</html>
