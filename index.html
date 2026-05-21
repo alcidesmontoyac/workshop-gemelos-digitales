@@ -498,6 +498,15 @@
             <input type="text" name="semillero_nombre" id="semilleroNombre" class="form-input" placeholder="Nombre del semillero de investigación">
           </div>
 
+          <div class="form-group form-col-full" id="semilleroInteresGroup" style="display:none">
+            <label class="form-label">¿Le gustaría unirse a un semillero de investigación?</label>
+            <div class="radio-group radio-inline">
+              <label class="radio-option"><input type="radio" name="semillero_interes" value="Sí, me interesa mucho"><span>Sí, me interesa mucho</span></label>
+              <label class="radio-option"><input type="radio" name="semillero_interes" value="Posiblemente"><span>Posiblemente</span></label>
+              <label class="radio-option"><input type="radio" name="semillero_interes" value="No por ahora"><span>No por ahora</span></label>
+            </div>
+          </div>
+
           <hr class="form-section-divider">
 
           <!-- 03 Compromiso y disponibilidad -->
@@ -643,15 +652,18 @@ function showDay(day) {
 }
 
 function toggleSemillero(radio) {
-  const group = document.getElementById('semilleroNombreGroup');
-  const input = document.getElementById('semilleroNombre');
+  var nombreGroup = document.getElementById('semilleroNombreGroup');
+  var interesGroup = document.getElementById('semilleroInteresGroup');
+  var input = document.getElementById('semilleroNombre');
   if (radio.value === 'Sí') {
-    group.style.display = 'flex';
+    nombreGroup.style.display = 'flex';
     input.required = true;
+    interesGroup.style.display = 'none';
   } else {
-    group.style.display = 'none';
+    nombreGroup.style.display = 'none';
     input.required = false;
     input.value = '';
+    interesGroup.style.display = 'flex';
   }
 }
 
@@ -690,6 +702,7 @@ document.getElementById('inscripcionForm').addEventListener('submit', async func
     cad: getRadio('cad'),
     semillero: getRadio('semillero'),
     semillero_nombre: form.semillero_nombre.value,
+    semillero_interes: getRadio('semillero_interes'),
     asistencia: getRadio('asistencia'),
     proyectos_mit: getRadio('proyectos_mit'),
     viernes: getRadio('viernes'),
