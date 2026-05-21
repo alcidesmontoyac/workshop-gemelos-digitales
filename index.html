@@ -704,7 +704,7 @@ document.getElementById('inscripcionForm').addEventListener('submit', async func
   submitLoading.style.display = 'inline';
 
   try {
-    await fetch('APPS_SCRIPT_URL', {
+    await fetch('https://script.google.com/macros/s/AKfycbx6l03okTxn5bidzNF27GbpBBojgUKG65oNFBPuV2SFZ1Y6uyZq5JuaZa2AZHB1CWDa/exec', {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
